@@ -24,7 +24,7 @@ startTime = datetime.now()
 reader = easyocr.Reader(['en'],gpu=False)
 print("EasyOCR Initialize Time:",datetime.now() - startTime)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 def opencv(path):
  startTime = datetime.now()
