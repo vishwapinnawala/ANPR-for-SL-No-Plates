@@ -1,7 +1,7 @@
 import cv2
 #https://rsdharra.com/blog/lesson/26.html
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('http://192.168.43.1:6852/video')
 
 
 car_cascade = cv2.CascadeClassifier(r"C:\Users\WUSC SRILANKA\Downloads\cars.xml")
