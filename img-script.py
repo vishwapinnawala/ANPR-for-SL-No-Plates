@@ -4,7 +4,7 @@ import imutils
 import easyocr
 import time
 
-mypath=r"C:\Users\WUSC SRILANKA\Desktop\ANPR-for-SL-No-Plates\1.jpg"
+#mypath=r"C:\Users\WUSC SRILANKA\Desktop\ANPR-for-SL-No-Plates\1.jpg"
 
 reader = easyocr.Reader(['en'],gpu=False)#Initializing OCR Engine
 
