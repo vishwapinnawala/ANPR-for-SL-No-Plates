@@ -3,22 +3,26 @@ import numpy as np
 import imutils
 import easyocr
 import time
+import mysql.connector
+import requests
+from datetime import datetime
 
-mypath=r"C:\Users\WUSC SRILANKA\Desktop\ANPR-for-SL-No-Plates\1.jpg"
+
+
 
 reader = easyocr.Reader(['en'],gpu=False)#Initializing OCR Engine
 
-
 #cap = cv2.VideoCapture(0)
 
-def opencv(path):
+def opencv():
  print("Waiting")
  time.sleep(5)
- capture = cv2.VideoCapture('http://192.168.43.1:6852/video')
+ capture = cv2.VideoCapture('http://192.168.43.57:6852/video')
  if capture.isOpened():
             print("Device Opened")
  else:
             print("Failed to open Device")
+
  ret,frame = capture.read()
  #cv2.imshow("Capturing",frame)
  #img = cv2.imread(frame)
@@ -53,14 +57,16 @@ def opencv(path):
     cv2.imshow("Inverted",inverted)#Displaying Inverted
  except:
     print("Failed to read\n")
-    print(reading(mypath))
+    print(reading())
  cv2.waitKey(0)
  return cropped_image
 
+
+
 #OCR Part
-def reading(mypath):
+def reading():
    try:
-    result = reader.readtext(opencv(mypath))#Calling OpenCV function
+    result = reader.readtext(opencv())#Calling OpenCV function
    
  
     mylist=[]
@@ -71,18 +77,53 @@ def reading(mypath):
        count=count+1 #Counting Items in list
 
     print("Count: ",count)#how many Segmented Text
-    #print(mylist)
-
-
+    #print(mylist)    
     joinlist=' '.join(mylist)#Joining the (mylist)list items together
     #print(joinlist)
+    
 
- 
+    mydb = mysql.connector.connect(
+       host="localhost",
+       user="root",
+       password="",
+       database="test")
+
+
+    mycursor = mydb.cursor()
+    sql="SELECT plateno FROM plates "
+    state=mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    outlist=""
+    for x in myresult:
+       if(x[0]==joinlist):
+          print("Match")
+          
+          
+
+          time=datetime.now()
+          #print(time)
+
+          url = 'http://localhost/test.php'
+          myobj = {'Timestamp':time,'plateno': x[0]}
+
+          xr = requests.post(url, data = myobj)
+
+          #print(x.text)
+
+
+       else:
+          print("No Match")
+       #outlist=x[0]
+       #print(outlist)
+
+
+
     return joinlist
    except:
-    print(reading(mypath))
+    print(reading())
 
 while True:
- print(reading(mypath))
+ print(reading())
  
+
 
